@@ -7,7 +7,7 @@ import sublime_plugin
 class DirectPrintCommand(sublime_plugin.TextCommand):
     @property
     def settings(self):
-        return sublime.load_settings('SublimePrint.sublime-settings')
+        return sublime.load_settings('SublimeLP.sublime-settings')
 
     def _open_cmd(self, *args, **kwargs):
         return subprocess.Popen(*args, stdin=subprocess.PIPE,
