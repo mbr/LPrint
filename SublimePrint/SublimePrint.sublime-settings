@@ -1,0 +1,43 @@
+{
+  // Printer name to print to (if null, uses default)
+  "stlp_dest": null,
+
+  // If true, adds -E to each lp call
+  "stlp_force_encryption": false,
+
+  // Username (lp)
+  "stlp_username": null,
+
+  // Host (lp)
+  "stlp_host": null,
+
+  // If true, requests an email to be sent when the print job completes
+  "stlp_send_email": false,
+
+  // Number of copies. Defaults to not set, which causes the default to be used
+  "stlp_copies": null,
+
+  // Priority. Not set means lp's default of 50 is used
+  "stlp_priority": null,
+
+  // Media size. Varies from printer to printer, but "a4", "letter" or "legal"
+  // are usually valid values
+  "stlp_media": "a4",
+
+  // If true, specifies landscape printing
+  "stlp_landscape": false,
+
+  // Double-sided printing. Uses default if not set, other values are usually
+  // "long-edge", "short-edge" or "one-sided"
+  "stlp_duplex": null,
+
+  // Characters per inch/line when printing text files directly through lp
+  "stlp_text_cols_per_inch": null,
+  "stlp_text_lines_per_inch": null,
+
+  // Page margins in points when printing text files directly through lp
+  "stlp_text_margin_top": null,
+  "stlp_text_margin_left": null,
+  "stlp_text_margin_right": null,
+  "stlp_text_margin_bottom": null
+}

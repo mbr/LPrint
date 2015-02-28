@@ -5,6 +5,10 @@ import sublime_plugin
 
 
 class DirectPrintCommand(sublime_plugin.TextCommand):
+    @property
+    def settings(self):
+        return sublime.load_settings('SublimePrint.sublime-settings')
+
     def _open_cmd(self, *args, **kwargs):
         return subprocess.Popen(*args, stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -24,7 +28,7 @@ class DirectPrintCommand(sublime_plugin.TextCommand):
     def run_lp(self, lines, title):
         try:
             sublime.status_message('Printing {}'.format(title))
-            settings = self.view.settings()
+            settings = self.settings
 
             lp_cmd = ['lp', '-t', title]
 
