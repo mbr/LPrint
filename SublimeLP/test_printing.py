@@ -5,16 +5,37 @@ from printing.filter import CommandFilter, DocumentPrinter
 class EnscriptFilter(CommandFilter):
     output_format = 'ps'
 
-    def __init__(self, encoding='latin1'):
-        super(EnscriptFilter, self).__init__()
-        self.encoding = encoding
-
     def __call__(self, text, options):
-        proc = self._popen(
-            ['enscript', '-p', '-', '-X', self.encoding],
-        )
+        encoding = options.pop('print_encoding', 'latin1')
 
-        return self._communicate(proc, text.encode(self.encoding)), options
+        args = ['enscript', '-p', '-', '-X', encoding]
+
+        if not options.pop('header', False):
+            args.append('--no-header', '')
+
+        args.extend(['--font', '{}@{}'.format(
+            options.pop('font_family', 'Courier'),
+            options.pop('font_size', 10),
+        )])
+
+        if options.pop('landscape', False):
+            args.append('--landscape')
+        else:
+            args.append('--portrait')
+
+        args.extend(['--media', options.pop('media', 'a4')])
+
+        args.append('--margins')
+        args.append('{}:{}:{}:{}'.format(
+            options.pop('margin_left', ''),
+            options.pop('margin_right', ''),
+            options.pop('margin_top', ''),
+            options.pop('margin_bottom', ''),
+        ))
+
+        proc = self._popen(args)
+
+        return self._communicate(proc, text.encode(encoding)), options
 
 
 class PAPSFilter(CommandFilter):
@@ -60,15 +81,17 @@ if __name__ == '__main__':
         'duplex': 'long-edge',
         'copies': 1,
         'media': 'a4',
-        'font_family': 'Times New Roman',
+        'font_family': 'Times',
         'font_size': 28,
         'margin_left': 0,
+        'margin_right': 0,
         'text_columns': 2,
         'landscape': True,
+        'header': True,
     }
 
     doc = u'hellö, wörld! ' * 50
     dp = DocumentPrinter(ps.get_printer('PDF'))
-    dp.filters.append(PAPSFilter())
+    dp.filters.append(EnscriptFilter())
 
     dp.print_doc(doc, title=u'printtest', options=pos)

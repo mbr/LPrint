@@ -4,9 +4,10 @@
     'copies': None,          # integer
     'priority': None,        # range 0-100
     'media': None,           # a4, letter, legal or others
-    'landscape': None,       # False means portrait
+    'landscape': False,
     'font_size': 12,
     'font_family': 'Courier New',
+    'header': False,
 
     # in pt:
     'margin_top':
