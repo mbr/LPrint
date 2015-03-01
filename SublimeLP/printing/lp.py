@@ -1,50 +1,10 @@
-from contextlib import contextmanager
-from functools import wraps
 import subprocess
 
-
-class PrintSystemError(Exception):
-    pass
-
-
-class PrintSystem(object):
-    pass
+from . import PrintSystem, CmdOptsMixin
+from .exc import error_wrap
 
 
-@contextmanager
-def error_wrap():
-    try:
-        yield
-    except OSError as e:
-        raise PrintSystemError('OSError: {}'.format(e))
-    except subprocess.CalledProcessError as e:
-        raise PrintSystemError('{} failed ({}): {}'.format(
-            e.cmd, e.returncode, e.output
-        ))
-
-
-def wrap_errors(f):
-    @wraps(f)
-    def _(*args, **kwargs):
-        with error_wrap():
-            return f(*args, **kwargs)
-
-    return _
-
-
-class CmdOptsMixin(object):
-    def __init__(self):
-        self.cmds = {}
-        self.opts = {}
-
-    def build_args(self, cmd, *extra_args):
-        args = [self.cmds.get(cmd, cmd)]
-        args.extend(self.opts.get(cmd, []))
-        args.extend(extra_args)
-        return args
-
-
-class PrintSystemLP(CmdOptsMixin):
+class PrintSystemLP(PrintSystem, CmdOptsMixin):
     def __init__(self):
         super(PrintSystemLP, self).__init__()
         self.cmds['lp'] = 'lp'
@@ -163,39 +123,3 @@ class PrinterLP(object):
 
     def __repr__(self):
         return '<Printer {!r}>'.format(self.name)
-
-
-class PrintOptions(object):
-    def __init__(self, **kwargs):
-        super(PrintOptions, self).__init__()
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
-    duplex = None          # possible values: 'long-edge', 'short-edge',
-                           # 'one-sided'
-    copies = None          # integer
-    priority = None        # range 0-100
-    media = None           # a4, letter, legal or others
-    landscape = None       # False means portrait
-    chars_per_inch = None  # characters per inch/line, should be a tuple
-    margins = (None,       # top (in pt)
-               None,       # right
-               None,       # left
-               None,)      # bottom
-
-
-if __name__ == '__main__':
-    ps = PrintSystemLP()
-
-    print(ps.get_all_printers())
-    print(ps.get_default_printer())
-
-    pos = PrintOptions(
-        duplex='long-edge',
-        copies=1,
-        media='a4',
-        landscape=True,
-    )
-
-    ps.get_printer('PDF').print_raw(b'hello, world', title='HELLOWORLD',
-                                    options=pos)
