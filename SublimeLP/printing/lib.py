@@ -68,3 +68,13 @@ class PAPSFilter(CommandFilter):
 
         proc = self._popen(args)
         return self._communicate(proc, text.encode('utf8')), options
+
+
+class RST2PDFFilter(CommandFilter):
+    output_format = 'pdf'
+
+    def __call__(self, text, options):
+        args = ['rst2pdf', '-o', '-']
+
+        proc = self._popen(args)
+        return self._communicate(proc, text.encode('utf8')), options
