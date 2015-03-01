@@ -6,7 +6,7 @@ class DocumentPrinter(object):
         self.printer = printer
         self.filters = filters
 
-    def print_doc(self, data, title=None, options={}):
+    def print_doc(self, data, options={}):
         fmt = 'raw'
         options = options.copy()
 
@@ -15,7 +15,7 @@ class DocumentPrinter(object):
             fmt = f.output_format
 
         return getattr(self.printer, 'print_{}'.format(fmt))(
-            data, title, options
+            data, options
         )
 
 

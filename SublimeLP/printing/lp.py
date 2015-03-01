@@ -37,11 +37,11 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
     def get_printer(self, name):
         return PrinterLP(self, name)
 
-    def _opts_to_args(self, title=None, options={}):
+    def _opts_to_args(self, options={}):
         args = []
 
-        if title is not None:
-            args.extend(['-t', title])
+        if options.get('title', None) is not None:
+            args.extend(['-t', options['title']])
 
         if options.get('copies', None) is not None:
             args.extend(['-n', str(options['copies'])])
@@ -92,10 +92,10 @@ class PrinterLP(Printer):
         self.ps = ps
         self.name = name
 
-    def print_raw(self, data, title=None, options={}):
+    def print_raw(self, data, options={}):
         with error_wrap():
             args = self.ps.build_args(
-                'lp', '-d', self.name, *self.ps._opts_to_args(title, options)
+                'lp', '-d', self.name, *self.ps._opts_to_args(options)
             )
 
             proc = subprocess.Popen(

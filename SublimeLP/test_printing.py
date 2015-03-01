@@ -20,6 +20,7 @@ if __name__ == '__main__':
         'text_columns': 2,
         'landscape': True,
         'header': True,
+        'title': 'JOBTEST',
     }
 
     doc = u'hellö, wörld! ' * 50

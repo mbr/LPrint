@@ -31,14 +31,14 @@ class PrintSystem(object):
 class Printer(object):
     name = None
 
-    def print_raw(self, title=None, options={}):
+    def print_raw(self, options={}):
         pass
 
-    def print_ps(self, data, title=None, options={}):
-        self.print_raw(data, title, options)
+    def print_ps(self, data, options={}):
+        self.print_raw(data, options)
 
-    def print_pdf(self, data, title=None, options={}):
-        self.print_raw(data, title, options)
+    def print_pdf(self, data, options={}):
+        self.print_raw(data, options)
 
     def __repr__(self):
         return '<Printer {!r}>'.format(self.name)

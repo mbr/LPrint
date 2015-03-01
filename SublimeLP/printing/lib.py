@@ -1,3 +1,5 @@
+import re
+
 from printing.filter import CommandFilter
 
 
@@ -11,6 +13,8 @@ class EnscriptFilter(CommandFilter):
 
         if not options.pop('header', False):
             args.append('--no-header', '')
+
+        args.extend(['--title', options.pop('title', 'Enscript_Print_Job')])
 
         args.extend(['--font', '{}@{}'.format(
             options.pop('font_family', 'Courier'),
@@ -39,6 +43,8 @@ class EnscriptFilter(CommandFilter):
 
 class PAPSFilter(CommandFilter):
     output_format = 'ps'
+    _title_re = re.compile(b'%%Title: stdin')
+    _unsafe_re = re.compile(b'[^0-9A-Za-z-_.]')
 
     def __call__(self, text, options):
         args = ['paps']
@@ -67,7 +73,16 @@ class PAPSFilter(CommandFilter):
             args.append('--header')
 
         proc = self._popen(args)
-        return self._communicate(proc, text.encode('utf8')), options
+        ps = self._communicate(proc, text.encode('utf8'))
+
+        # fix title
+        safe_title = self._unsafe_re.sub(
+            b'', options.pop('title', 'PAPS Print Job').encode('utf8')
+        )
+        ps_new = self._title_re.sub(
+            b'%%Title: ' + safe_title, ps, count=1
+        )
+        return ps_new, options
 
 
 class RST2PDFFilter(CommandFilter):
