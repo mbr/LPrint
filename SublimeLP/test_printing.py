@@ -18,6 +18,17 @@ class EnscriptFilter(CommandFilter):
         return self._communicate(proc, text.encode(self.encoding))
 
 
+class PAPSFilter(CommandFilter):
+    output_format = 'ps'
+
+    def __call__(self, text):
+        proc = self._popen(
+            ['paps']
+        )
+
+        return self._communicate(proc, text.encode('utf8'))
+
+
 if __name__ == '__main__':
     ps = PrintSystemLP()
 
@@ -32,6 +43,6 @@ if __name__ == '__main__':
 
     doc = u'hellö, wörld!'
     dp = DocumentPrinter(ps.get_printer('PDF'))
-    dp.filters.append(EnscriptFilter())
+    dp.filters.append(PAPSFilter())
 
     dp.print_doc(doc, title=u'printtest', options=pos)
