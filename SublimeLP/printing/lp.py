@@ -1,6 +1,6 @@
 import subprocess
 
-from . import PrintSystem, Printer, CmdOptsMixin
+from . import PrintSystem, Printer, CmdOptsMixin, DEFAULT_OPTIONS
 from .exc import error_wrap
 
 
@@ -37,53 +37,51 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
     def get_printer(self, name):
         return PrinterLP(self, name)
 
-    def _opts_to_args(self, title=None, options=None,):
+    def _opts_to_args(self, title=None, options=DEFAULT_OPTIONS):
         args = []
 
         if title is not None:
             args.extend(['-t', title])
 
-        if options is None:
-            return args
+        if options['copies'] is not None:
+            args.extend(['-n', str(options['copies'])])
 
-        if options.copies is not None:
-            args.extend(['-n', str(options.copies)])
+        if options['priority'] is not None:
+            args.extend(['-q', str(options['priority'])])
 
-        if options.priority is not None:
-            args.extend(['-q', str(options.priority)])
+        if options['media'] is not None:
+            args.extend(['-o', 'media={}'.format(options['media'])])
 
-        if options.media is not None:
-            args.extend(['-o', 'media={}'.format(options.media)])
-
-        if options.landscape is not None:
+        if options['landscape'] is not None:
             args.append('-o')
-            args.append('landscape' if options.landscape else 'portrait')
+            args.append('landscape' if options['landscape'] else 'portrait')
 
-        if options.duplex is not None:
+        if options['duplex'] is not None:
             args.append('-o')
 
-            if options.duplex == 'long-edge':
+            if options['duplex'] == 'long-edge':
                 args.append('sides=two-sided-long-edge')
-            elif options.duplex == 'short-edge':
+            elif options['duplex'] == 'short-edge':
                 args.append('sides=two-sided-short-edge')
-            elif options.duplex == 'one-sided':
+            elif options['duplex'] == 'one-sided':
                 args.append('sides=one-sided')
             else:
                 raise ValueError('Invalid duplex value: {}'.format(
-                    options.duplex)
+                    options['duplex'])
                 )
 
-        if options.chars_per_inch is not None:
-            cpi, lpi = options.chars_per_inch
+        # For simplicity we assume 10 Pitch (== CPI) at font size 10 and
+        # keep the 10/6 ratio that's the default of lp
+        # nothing we can do about font-familiy
+        if options['font_size'] is not None:
+            cpi = 10 * (10.0/options['font_size'])
+            lpi = cpi * 6 / 10.0
+            args.extend(['-o', 'cpi={}'.format(cpi),
+                         '-o', 'lpi={}'.format(lpi)])
 
-            if cpi:
-                args.extend(['-o', 'cpi={}'.format(cpi)])
-            if lpi:
-                args.extend(['-o', 'lpi={}'.format(lpi)])
-
-        if options.margins is not None:
+        if options['margins'] is not None:
             for idx, name in enumerate(('top', 'right', 'bottom', 'left')):
-                val = options.margins[idx]
+                val = options['margins'][idx]
 
                 if val is not None:
                     args.extend(['-o', 'page-{}={}'.format(name, val)])
@@ -96,7 +94,7 @@ class PrinterLP(Printer):
         self.ps = ps
         self.name = name
 
-    def print_raw(self, data, title=None, options=None):
+    def print_raw(self, data, title=None, options=DEFAULT_OPTIONS):
         with error_wrap():
             args = self.ps.build_args(
                 'lp', '-d', self.name, *self.ps._opts_to_args(title, options)
