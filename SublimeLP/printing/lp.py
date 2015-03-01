@@ -1,6 +1,6 @@
 import subprocess
 
-from . import PrintSystem, CmdOptsMixin
+from . import PrintSystem, Printer, CmdOptsMixin
 from .exc import error_wrap
 
 
@@ -91,7 +91,7 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
         return args
 
 
-class PrinterLP(object):
+class PrinterLP(Printer):
     def __init__(self, ps, name):
         self.ps = ps
         self.name = name
@@ -114,12 +114,3 @@ class PrinterLP(object):
                 raise subprocess.CalledProcessError(
                     proc.returncode, proc.args, stdout
                 )
-
-    def print_ps(self, data, title=None, options=None):
-        self.print_raw(data, title, options)
-
-    def print_pdf(self, data, title=None, options=None):
-        self.print_raw(data, title, options)
-
-    def __repr__(self):
-        return '<Printer {!r}>'.format(self.name)

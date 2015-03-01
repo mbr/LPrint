@@ -1,5 +1,28 @@
 class PrintSystem(object):
-    pass
+    def get_all_printers(self):
+        pass
+
+    def get_default_printer(self):
+        pass
+
+    def get_printer(self):
+        pass
+
+
+class Printer(object):
+    name = None
+
+    def print_raw(self, title=None, options=None):
+        pass
+
+    def print_ps(self, data, title=None, options=None):
+        self.print_raw(data, title, options)
+
+    def print_pdf(self, data, title=None, options=None):
+        self.print_raw(data, title, options)
+
+    def __repr__(self):
+        return '<Printer {!r}>'.format(self.name)
 
 
 class CmdOptsMixin(object):
