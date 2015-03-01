@@ -79,12 +79,10 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
             args.extend(['-o', 'cpi={}'.format(cpi),
                          '-o', 'lpi={}'.format(lpi)])
 
-        if options.get('margins', None) is not None:
-            for idx, name in enumerate(('top', 'right', 'bottom', 'left')):
-                val = options['margins'][idx]
-
-                if val is not None:
-                    args.extend(['-o', 'page-{}={}'.format(name, val)])
+        for side in ('top', 'right', 'bottom', 'left'):
+            m = 'margin_' + side
+            if options.get(m, None) is not None:
+                args.extend(['-o', 'page-{}={}'.format(side, options[m])])
 
         return args
 

@@ -6,11 +6,13 @@
     'media': None,           # a4, letter, legal or others
     'landscape': None,       # False means portrait
     'font_size': 12,
-    'font_familiy': 'Courier New',
-    'margins': (None,       # top (in pt)
-                None,       # right
-                None,       # left
-                None,)      # bottom
+    'font_family': 'Courier New',
+
+    # in pt:
+    'margin_top':
+    'margin_right':
+    'margin_bottom':
+    'margin_left':
 """
 
 
