@@ -1,4 +1,4 @@
-DEFAULT_OPTIONS = {
+"""Available options:
     'duplex': None,          # possible values are 'long-edge', 'short-edge',
                              # 'one-sided'
     'copies': None,          # integer
@@ -11,7 +11,7 @@ DEFAULT_OPTIONS = {
                 None,       # right
                 None,       # left
                 None,)      # bottom
-}
+"""
 
 
 class PrintSystem(object):
@@ -28,13 +28,13 @@ class PrintSystem(object):
 class Printer(object):
     name = None
 
-    def print_raw(self, title=None, options=DEFAULT_OPTIONS):
+    def print_raw(self, title=None, options={}):
         pass
 
-    def print_ps(self, data, title=None, options=DEFAULT_OPTIONS):
+    def print_ps(self, data, title=None, options={}):
         self.print_raw(data, title, options)
 
-    def print_pdf(self, data, title=None, options=DEFAULT_OPTIONS):
+    def print_pdf(self, data, title=None, options={}):
         self.print_raw(data, title, options)
 
     def __repr__(self):

@@ -1,4 +1,3 @@
-from printing import DEFAULT_OPTIONS
 from printing.lp import PrintSystemLP
 from printing.filter import CommandFilter, DocumentPrinter
 
@@ -35,12 +34,11 @@ if __name__ == '__main__':
     print(ps.get_all_printers())
     print(ps.get_default_printer())
 
-    pos = DEFAULT_OPTIONS.copy()
-    pos.update({
+    pos = {
         'duplex': 'long-edge',
         'copies': 1,
         'media': 'a4',
-    })
+    }
 
     doc = u'hellö, wörld!'
     dp = DocumentPrinter(ps.get_printer('PDF'))

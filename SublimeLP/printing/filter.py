@@ -1,14 +1,12 @@
 import subprocess
 
-from . import DEFAULT_OPTIONS
-
 
 class DocumentPrinter(object):
     def __init__(self, printer, filters=[]):
         self.printer = printer
         self.filters = filters
 
-    def print_doc(self, data, title=None, options=DEFAULT_OPTIONS):
+    def print_doc(self, data, title=None, options={}):
         fmt = 'raw'
         options = options.copy()
 

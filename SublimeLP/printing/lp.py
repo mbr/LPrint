@@ -1,6 +1,6 @@
 import subprocess
 
-from . import PrintSystem, Printer, CmdOptsMixin, DEFAULT_OPTIONS
+from . import PrintSystem, Printer, CmdOptsMixin
 from .exc import error_wrap
 
 
@@ -37,26 +37,26 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
     def get_printer(self, name):
         return PrinterLP(self, name)
 
-    def _opts_to_args(self, title=None, options=DEFAULT_OPTIONS):
+    def _opts_to_args(self, title=None, options={}):
         args = []
 
         if title is not None:
             args.extend(['-t', title])
 
-        if options['copies'] is not None:
+        if options.get('copies', None) is not None:
             args.extend(['-n', str(options['copies'])])
 
-        if options['priority'] is not None:
+        if options.get('priority', None) is not None:
             args.extend(['-q', str(options['priority'])])
 
-        if options['media'] is not None:
+        if options.get('media', None) is not None:
             args.extend(['-o', 'media={}'.format(options['media'])])
 
-        if options['landscape'] is not None:
+        if options.get('landscape', None) is not None:
             args.append('-o')
             args.append('landscape' if options['landscape'] else 'portrait')
 
-        if options['duplex'] is not None:
+        if options.get('duplex', None) is not None:
             args.append('-o')
 
             if options['duplex'] == 'long-edge':
@@ -73,13 +73,13 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
         # For simplicity we assume 10 Pitch (== CPI) at font size 10 and
         # keep the 10/6 ratio that's the default of lp
         # nothing we can do about font-familiy
-        if options['font_size'] is not None:
+        if options.get('font_size', None) is not None:
             cpi = 10 * (10.0/options['font_size'])
             lpi = cpi * 6 / 10.0
             args.extend(['-o', 'cpi={}'.format(cpi),
                          '-o', 'lpi={}'.format(lpi)])
 
-        if options['margins'] is not None:
+        if options.get('margins', None) is not None:
             for idx, name in enumerate(('top', 'right', 'bottom', 'left')):
                 val = options['margins'][idx]
 
@@ -94,7 +94,7 @@ class PrinterLP(Printer):
         self.ps = ps
         self.name = name
 
-    def print_raw(self, data, title=None, options=DEFAULT_OPTIONS):
+    def print_raw(self, data, title=None, options={}):
         with error_wrap():
             args = self.ps.build_args(
                 'lp', '-d', self.name, *self.ps._opts_to_args(title, options)
