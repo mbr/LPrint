@@ -3,31 +3,48 @@ import subprocess
 import sublime
 import sublime_plugin
 
+from .printing.lp import PrintSystemLP
 
-class DirectPrintCommand(sublime_plugin.TextCommand):
-    @property
-    def settings(self):
+
+class SettingsAdapter(object):
+    def __init__(self, settings):
+        self.settings = settings
+        self.popped = []
+        self.added = {}
+
+    def __setitem__(self, key, value):
+        self.added[key] = value
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __contains__(self, key):
+        return self.settings.has(key)
+
+    def get(self, key, *args):
+        if key in self.popped:
+            if len(args) < 1:
+                raise KeyError(key)
+            return args[0]
+
+        if key in self.added:
+            return self.added[key]
+
+        return self.settings.get(key, *args)
+
+    def pop(self, *args):
+        val = self.get(*args)
+        self.popped.append(args[0])
+
+        return val
+
+
+class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
+    def load_settings(self):
         return sublime.load_settings('SublimeLP.sublime-settings')
-
-    def _open_cmd(self, *args, **kwargs):
-        return subprocess.Popen(*args, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                **kwargs)
-
-    def _communicate(self, cmd, *args, **kwargs):
-        stdout, stderr = cmd.communicate(*args, **kwargs)
-
-        if not cmd.returncode == 0:
-            print(stdout)
-            print(stderr)
-            raise IOError('Process exited with non-zero return value: {}'.
-                          format(cmd.args))
-
-        return stdout, stderr
 
     def run_lp(self, lines, title):
         try:
-            sublime.status_message('Printing {}'.format(title))
             settings = self.settings
 
             lp_cmd = ['lp', '-t', title]
@@ -99,6 +116,22 @@ class DirectPrintCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         content = self.view.substr(sublime.Region(0, self.view.size()))
-        self.run_lp(content,
-                    self.view.name() or self.view.file_name() or
-                    'Buffer {}'.format(self.view.buffer_id()))
+        options = SettingsAdapter(self.load_settings())
+
+        # instantiate printing system
+        ps = PrintSystemLP()
+        ps.opts['lp'] = options.pop('lp_args')
+        ps.opts['lpstat'] = options.pop('lpstat_args')
+
+        printer_name = options.pop('printer')
+        if printer_name is None:
+            printer = ps.get_default_printer()
+        else:
+            printer = ps.get_printer(printer_name)
+
+        title = (self.view.name() or self.view.file_name() or
+                 'Buffer {}'.format(self.view.buffer_id()))
+        options['title'] = title
+        sublime.status_message('Printing {}'.format(title))
+
+        printer.print_raw(content.encode('utf8'), options)

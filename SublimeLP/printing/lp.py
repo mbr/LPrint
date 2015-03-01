@@ -98,6 +98,8 @@ class PrinterLP(Printer):
                 'lp', '-d', self.name, *self.ps._opts_to_args(options)
             )
 
+            print('lp args:', args)
+
             proc = subprocess.Popen(
                 args,
                 stdin=subprocess.PIPE,
