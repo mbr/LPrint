@@ -12,11 +12,45 @@ def _get_synax(view):
     return os.path.splitext(os.path.basename(syntax_file))[0]
 
 
-def _get_options(view):
-    return SettingsAdapter([
-        sublime.load_settings('SublimeLP-{}'.format(_get_synax(view))),
-        sublime.load_settings('SublimeLP.sublime-settings'),
-    ])
+def _get_options(view=None):
+    options = SettingsAdapter(
+        [sublime.load_settings('SublimeLP.sublime-settings')]
+    )
+
+    if view is not None:
+        options.settings.insert(
+            0, sublime.load_settings('SublimeLP-{}'.format(_get_synax(view)))
+        )
+
+    return options
+
+
+def _get_print_system(settings):
+    ps = PrintSystemLP()
+    ps.opts['lp'] = settings.get('lp_args')
+    ps.opts['lpstat'] = settings.get('lpstat_args')
+
+    return ps
+
+
+class SelectPrinterCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        settings = sublime.load_settings('SublimeLP.sublime-settings')
+        ps = _get_print_system(settings)
+
+        printers = ps.get_all_printers()
+
+        def select_printer(idx):
+            if idx == -1:
+                return
+
+            printer = printers[idx]
+            settings.set('printer', printer.name.decode('utf8'))
+            sublime.save_settings('SublimeLP.sublime-settings')
+
+        self.window.show_quick_panel(
+            [p.name.decode('utf8') for p in printers], select_printer
+        )
 
 
 class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
@@ -25,9 +59,7 @@ class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
         options = _get_options(self.view)
 
         # instantiate printing system
-        ps = PrintSystemLP()
-        ps.opts['lp'] = options.pop('lp_args')
-        ps.opts['lpstat'] = options.pop('lpstat_args')
+        ps = _get_print_system(options)
 
         printer_name = options.pop('printer')
         if printer_name is None:
