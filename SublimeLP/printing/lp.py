@@ -16,7 +16,7 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
             buf = subprocess.check_output(self.build_args('lpstat', '-a'))
 
         for line in buf.splitlines():
-            printer_name = line.split()[0].strip()
+            printer_name = line.split()[0].strip().decode('utf8')
             if not printer_name:
                 continue
 
@@ -32,7 +32,7 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
 
         name = buf.split(b':')[-1].strip()
 
-        return PrinterLP(self, name)
+        return PrinterLP(self, name.decode('utf8'))
 
     def get_printer(self, name):
         return PrinterLP(self, name)
