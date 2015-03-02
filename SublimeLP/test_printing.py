@@ -23,8 +23,8 @@ if __name__ == '__main__':
         'title': 'JOBTEST',
     }
 
-    doc = u'hellö, wörld! ' * 50
+    doc = open('sample.rst', 'rb').read().decode('utf8')
     dp = DocumentPrinter(ps.get_printer('PDF'))
-    dp.filters.append(EnscriptFilter())
+    dp.filters.append(PAPSFilter())
 
-    dp.print_doc(doc, title=u'printtest', options=pos)
+    dp.print_doc(doc, options=pos)
