@@ -22,8 +22,9 @@
 
   // options that are picked up by some filters:
 
-  "highlight": true,  // syntax highlight. varies from filter to filter
-  "header": false,     // add a header line
+  "highlight": true,       // syntax highlight. varies from filter to filter
+  "header": false,         // add a header line
+  "print_encoding": null,  // if utf8 is not supported by a filter, use this
 
   // replace these with your custom filter chain, provided the necessary
   // tools are installed.

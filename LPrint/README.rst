@@ -59,6 +59,12 @@ configured normally, have a look at the default settings file for a list of
 options.
 
 
+How do I configure syntax-specific settings?
+--------------------------------------------
+
+TBD
+
+
 How does it work?
 -----------------
 
@@ -81,3 +87,38 @@ The simplest filter is the ``UTF8``-filter. It will take a string of text
 (i.e. the buffer to be printed) and output UTF8-encoded "binary" text. Since
 this can be passed to ``lp``, it is the default, as it reliably produces a
 printable output (albeit of the ugly kind).
+
+
+What filters are available?
+---------------------------
+
+UTF8
+~~~~
+
+The UTF8Filter is the most basic filter, it will encode your unicode text into
+UTF8, making it possible to ship it directly to lp.
+
+
+Enscript
+~~~~~~~~
+
+Calls `enscript` with a range of options. Enscript is finnicky about fonts and
+many default configurations do not include support TrueType fonts, which often
+make up the majority of fonts on a system. If your printed pages are all empty,
+try changing ``font_family`` to ``Courier`` and ``font_size`` to 10.
+
+
+PAPS
+~~~~
+
+An alternative to Enscript. Does not support syntax highlighting (at least not
+at this moment), but uses utf8 natively and handles fonts like you would
+expect.
+
+
+RST2PDF
+~~~~~~~
+
+Runs your document through ``rst2pdf``. Should be activated using
+Syntax-specific configuration options (see `How do I configure syntax-specific
+settings?`_).
