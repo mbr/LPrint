@@ -37,7 +37,7 @@ def _get_print_system(settings):
 
 
 def show_printer_select(window, ps, on_selected, add_default=True,
-                        message=None):
+                        message=None, current=False):
     printers = ps.get_all_printers()
 
     def select_printer(idx):
@@ -55,14 +55,21 @@ def show_printer_select(window, ps, on_selected, add_default=True,
         on_selected(printer)
 
     printer_list = [p.name for p in printers]
+    selected_index = -1
 
     if add_default:
         printer_list.insert(0, '(None, use print system default)')
+        if current is not False and current is None:
+            selected_index = 0
+
+    if current:
+        selected_index = printer_list.index(current)
 
     if message:
         sublime.status_message(message)
     window.show_quick_panel(
-        printer_list, select_printer
+        printer_list, select_printer,
+        selected_index=selected_index,
     )
 
 
