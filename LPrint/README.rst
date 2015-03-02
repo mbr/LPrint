@@ -32,15 +32,35 @@ This is also available via the menu: ``Preferences -> Select Printer``.
 How do I make the output less ugly?
 -----------------------------------
 
-See the `How it works`_-section for details; you need to select a filter.
-LPrint's defaults are chosen to maximize the chance you'll get a printout once
-you hit print, not to produce pretty results.
+You need to select a better filter. LPrint's defaults are chosen to maximize
+the chance you'll get a printout once you hit print, not to produce pretty
+results.
 
 
+How do I configure other options?
+---------------------------------
+
+LPrint uses its own settings (see ``Preferences -> Package Settings ->
+LPrint``), by editing your user settings you can override these. For example,
+if you want to use ``enscript`` (needs to be installed) as your default
+filter, you can set it up as follows::
+
+    "filter_chain": ["Enscript"]
+
+All text slated for printing will first be run through the ``EnscriptFilter``
+and then passed on to CUPS as postscript.
+
+All filters have their own quirks due to the underlying utilities (for
+example, ``enscript`` does not support utf8 while ``paps`` does, the latter
+does not do syntax highlighting and so on).
+
+Other configurable settings like paper size, number of copies, duplex can be
+configured normally, have a look at the default settings file for a list of
+options.
 
 
-How it works
-------------
+How does it work?
+-----------------
 
 lp
 ~~
