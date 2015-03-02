@@ -62,7 +62,18 @@ options.
 How do I configure syntax-specific settings?
 --------------------------------------------
 
-TBD
+Configuring the print-system per syntax is useful because it allows setting up
+filters solely for a single filetype. An example is setting up RST2PDF for
+restructed Text files.
+
+The quickest way to edit these is opening a file with the syntax you want
+special options for and use ``Preferences -> Package Settings -> LPrint ->
+Settings - Current Filetype``. Here is a useful example::
+
+    "filter_chain": ["RST2PDF"]
+
+Added to the restructuredText syntax-specific settings file this will result in
+nicely rendered output (make sure to install ``rst2pdf`` though).
 
 
 How does it work?
@@ -115,6 +126,8 @@ An alternative to Enscript. Does not support syntax highlighting (at least not
 at this moment), but uses utf8 natively and handles fonts like you would
 expect.
 
+You should have ``paps`` installed before using this.
+
 
 RST2PDF
 ~~~~~~~
@@ -122,3 +135,5 @@ RST2PDF
 Runs your document through ``rst2pdf``. Should be activated using
 Syntax-specific configuration options (see `How do I configure syntax-specific
 settings?`_).
+
+Install ``rst2pdf`` before using.
