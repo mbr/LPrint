@@ -92,26 +92,41 @@ class SelectPrinterCommand(sublime_plugin.WindowCommand):
         show_printer_select(
             self.window, ps, set_active_printer,
             message='Select the new default printer',
+            current=settings.get('printer')
         )
 
 
-class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
+class PrintDocumentCommand(sublime_plugin.TextCommand):
+    printer = 'ask'
+
     def run(self, edit):
-        content = self.view.substr(sublime.Region(0, self.view.size()))
         options = _get_options(self.view)
 
         # instantiate printing system
         ps = _get_print_system(options)
 
-        printer_name = options.pop('printer')
-        if printer_name is None:
-            printer = ps.get_default_printer()
-        else:
-            printer = ps.get_printer(printer_name)
+        if self.printer == 'ask':
+            show_printer_select(
+                self.view.window(), ps, lambda p: self._do_print(p, options),
+                message='Select destination printer',
+                current=options.get('printer')
+            )
+        elif self.printer == 'default':
+            pname = options.pop('printer')
+            if pname is None:
+                self._do_print(ps.get_default_printer(), options)
+            else:
+                self._do_print(ps.get_printer(pname), options)
 
+    def _do_print(self, printer, options):
+        content = self.view.substr(sublime.Region(0, self.view.size()))
         title = (self.view.name() or self.view.file_name() or
                  'Buffer {}'.format(self.view.buffer_id()))
         options['title'] = title
         sublime.status_message('Printing ({}): {}'.format(printer.name, title))
 
         printer.print_raw(content.encode('utf8'), options)
+
+
+class QuickPrintCommand(PrintDocumentCommand):
+    printer = 'default'
