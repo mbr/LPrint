@@ -73,7 +73,8 @@ Settings - Current Filetype``. Here is a useful example::
     "filter_chain": ["RST2PDF"]
 
 Added to the restructuredText syntax-specific settings file this will result in
-nicely rendered output (make sure to install ``rst2pdf`` though).
+nicely rendered output (make sure to install ``rst2pdf`` though). You can print
+this file to try it out now!
 
 
 How does it work?
