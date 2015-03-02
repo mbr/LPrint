@@ -11,7 +11,7 @@ class SettingsAdapter(object):
     def copy(self):
         cp = SettingsAdapter(self.settings)
         cp.added = self.added.copy()
-        cp.popped = self.popped[:]
+        cp.popped = self.popped.copy()
 
         return cp
 

@@ -1,6 +1,13 @@
 import re
 
-from printing.filter import CommandFilter
+from .filter import DocumentFilter, CommandFilter
+
+
+class UTF8Filter(DocumentFilter):
+    output_format = 'raw'
+
+    def __call__(self, text, options):
+        return text.encode('utf8'), options
 
 
 class EnscriptFilter(CommandFilter):

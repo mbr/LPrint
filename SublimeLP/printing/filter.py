@@ -6,6 +6,10 @@ class DocumentPrinter(object):
         self.printer = printer
         self.filters = filters
 
+    @property
+    def name(self):
+        return self.printer.name
+
     def print_doc(self, data, options={}):
         fmt = 'raw'
         options = options.copy()
@@ -18,19 +22,14 @@ class DocumentPrinter(object):
             data, options
         )
 
+    print_raw = print_doc
+
 
 class DocumentFilter(object):
     output_format = 'raw'
 
     def __call__(self, data, options):
         return data, options
-
-
-class UTF8Filter(DocumentFilter):
-    output_format = 'raw'
-
-    def __call__(self, text, options):
-        return text.encode('utf8'), options
 
 
 class CommandFilter(DocumentFilter):

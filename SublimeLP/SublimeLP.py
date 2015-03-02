@@ -4,6 +4,8 @@ import sublime
 import sublime_plugin
 
 from .printing.lp import PrintSystemLP
+from .printing import lib
+from .printing.filter import DocumentPrinter
 from .util import SettingsAdapter
 
 
@@ -119,13 +121,22 @@ class PrintDocumentCommand(sublime_plugin.TextCommand):
                 self._do_print(ps.get_printer(pname), options)
 
     def _do_print(self, printer, options):
+        filters = []
+
+        for filter_name in options.pop('filter_chain'):
+            fcls = getattr(lib, '{}Filter'.format(filter_name))
+            filters.append(fcls())
+
+        if filters:
+            printer = DocumentPrinter(printer, filters)
+
         content = self.view.substr(sublime.Region(0, self.view.size()))
         title = (self.view.name() or self.view.file_name() or
                  'Buffer {}'.format(self.view.buffer_id()))
         options['title'] = title
         sublime.status_message('Printing ({}): {}'.format(printer.name, title))
 
-        printer.print_raw(content.encode('utf8'), options)
+        printer.print_raw(content, options)
 
 
 class QuickPrintCommand(PrintDocumentCommand):
