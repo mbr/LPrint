@@ -8,12 +8,15 @@ before printing.
 
 How do I print?
 ---------------
-TBD (add keyboard shortcuts)
+Two commands are available for printing: ``Print Document`` and ``Quick
+Print``. The former allows you to print the current document on a printer of
+your choice, while ``Quick Print`` will use the default printer.
 
 
 How do I select a different printer?
 ------------------------------------
-TBD (add menu entries)
+Use the ``Select Printer`` command. The selected printed will be used whenever
+you use ``Quick Print`` and preselected on ``Print Document``.
 
 
 How do I make the output less ugly?

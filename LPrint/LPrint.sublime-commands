@@ -1,0 +1,12 @@
+[{
+  "caption": "Quick Pint",
+  "command": "quick_print"
+},
+{
+  "caption": "Print Document",
+  "command": "print_document"
+},
+{
+  "caption": "Select Printer",
+  "command": "select_printer"
+}]
