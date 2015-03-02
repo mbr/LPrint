@@ -9,8 +9,8 @@ from .printing.filter import DocumentPrinter
 from .util import SettingsAdapter
 
 
-PLUGIN_CONFIG_FILE = 'SublimeLP.sublime-settings'
-SYNTAX_CONFIG_FILE = 'SublimeLP-{}'
+PLUGIN_CONFIG_FILE = 'LPrint.sublime-settings'
+SYNTAX_CONFIG_FILE = 'LPrint-{}'
 
 
 def _get_synax(view):
