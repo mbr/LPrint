@@ -12,6 +12,13 @@ def _get_synax(view):
     return os.path.splitext(os.path.basename(syntax_file))[0]
 
 
+def _get_options(view):
+    return SettingsAdapter([
+        sublime.load_settings('SublimeLP-{}'.format(_get_synax(view))),
+        sublime.load_settings('SublimeLP.sublime-settings'),
+    ])
+
+
 class SettingsAdapter(object):
     """Wraps multiple sublime settings in a dict-like interface.
 
@@ -140,13 +147,7 @@ class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         content = self.view.substr(sublime.Region(0, self.view.size()))
-
-        options = SettingsAdapter([
-            sublime.load_settings(
-                'SublimeLP-{}'.format(_get_synax(self.view))
-            ),
-            sublime.load_settings('SublimeLP.sublime-settings'),
-        ])
+        options = _get_options(self.view)
 
         # instantiate printing system
         ps = PrintSystemLP()
