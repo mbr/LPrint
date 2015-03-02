@@ -5,16 +5,16 @@
     "mnemonic": "P",
     "id": "package-settings",
     "children": [{
-      "caption": "SublimeLP",
+      "caption": "LPrint",
       "children": [{
         "command": "open_file",
-          "args": {"file": "${packages}/SublimeLP/SublimeLP.sublime-settings"},
+          "args": {"file": "${packages}/LPrint/LPrint.sublime-settings"},
           "caption": "Settings - Default"
       },{
         "caption": "-"
       }, {
         "command": "open_file",
-        "args": {"file": "${packages}/User/SublimeLP.sublime-settings"},
+        "args": {"file": "${packages}/User/LPrint.sublime-settings"},
         "caption": "Settings – User"
       }]
     }]
