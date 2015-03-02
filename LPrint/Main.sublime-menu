@@ -37,7 +37,7 @@
             {
               "caption": "Settings - User",
               "command": "open_file",
-              "args": {"file": "${packages}/User/LPrint.sublime-settings.rst"}
+              "args": {"file": "${packages}/User/LPrint.sublime-settings"}
             },
             {
               "caption": "Settings - Current Filetype",
