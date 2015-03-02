@@ -7,6 +7,10 @@ from .printing.lp import PrintSystemLP
 from .util import SettingsAdapter
 
 
+PLUGIN_CONFIG_FILE = 'SublimeLP.sublime-settings'
+SYNTAX_CONFIG_FILE = 'SublimeLP-{}'
+
+
 def _get_synax(view):
     syntax_file = view.settings().get('syntax')
     return os.path.splitext(os.path.basename(syntax_file))[0]
@@ -14,13 +18,12 @@ def _get_synax(view):
 
 def _get_options(view=None):
     options = SettingsAdapter(
-        [sublime.load_settings('SublimeLP.sublime-settings')]
+        [sublime.load_settings(PLUGIN_CONFIG_FILE)]
     )
 
     if view is not None:
-        options.settings.insert(
-            0, sublime.load_settings('SublimeLP-{}'.format(_get_synax(view)))
-        )
+        fn = SYNTAX_CONFIG_FILE.format(_get_synax(view))
+        options.settings.insert(0, sublime.load_settings(fn))
 
     return options
 
@@ -35,7 +38,7 @@ def _get_print_system(settings):
 
 class SelectPrinterCommand(sublime_plugin.WindowCommand):
     def run(self):
-        settings = sublime.load_settings('SublimeLP.sublime-settings')
+        settings = sublime.load_settings(PLUGIN_CONFIG_FILE)
         ps = _get_print_system(settings)
 
         printers = ps.get_all_printers()
@@ -46,7 +49,7 @@ class SelectPrinterCommand(sublime_plugin.WindowCommand):
 
             printer = printers[idx]
             settings.set('printer', printer.name.decode('utf8'))
-            sublime.save_settings('SublimeLP.sublime-settings')
+            sublime.save_settings(PLUGIN_CONFIG_FILE)
 
         self.window.show_quick_panel(
             [p.name.decode('utf8') for p in printers], select_printer
