@@ -14,9 +14,9 @@ your choice, while ``Quick Print`` will use the default printer.
 
 The following hotkeys are available by default:
 
-* Alt+Shift+P:  ``Print Document``
-* Alt+Shift+O:  ``Quick Print``
-* Alt+Shift+S:  ``Select Printer``
+* alt+shift+p:  ``Print Document``
+* alt+shift+o:  ``Quick Print``
+* alt+shift+s:  ``Select Printer``
 
 
 How do I select a different printer?
