@@ -16,13 +16,17 @@ The following hotkeys are available by default:
 
 * alt+shift+p:  ``Print Document``
 * alt+shift+o:  ``Quick Print``
-* alt+shift+s:  ``Select Printer``
+* alt+shift+s:  ``Select Printer`` (Select printer selection below).
+
+You can also print from the menu, using ``File -> Print Document``.
 
 
 How do I select a different printer?
 ------------------------------------
 Use the ``Select Printer`` command. The selected printed will be used whenever
 you use ``Quick Print`` and preselected on ``Print Document``.
+
+This is also available via the menu: ``Preferences -> Select Printer``.
 
 
 How do I make the output less ugly?

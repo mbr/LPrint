@@ -10,7 +10,7 @@ from .util import SettingsAdapter
 
 
 PLUGIN_CONFIG_FILE = 'LPrint.sublime-settings'
-SYNTAX_CONFIG_FILE = 'LPrint-{}'
+SYNTAX_CONFIG_FILE = 'LPrint-{}.sublime-settings'
 
 
 def _get_synax(view):
@@ -141,3 +141,10 @@ class PrintDocumentCommand(sublime_plugin.TextCommand):
 
 class QuickPrintCommand(PrintDocumentCommand):
     printer = 'default'
+
+
+class LprintCurrentFiletypeSettings(sublime_plugin.TextCommand):
+    def run(self, edit):
+        fn = SYNTAX_CONFIG_FILE.format(_get_synax(self.view))
+        path = '{}/User/{}'.format(sublime.packages_path(), fn)
+        self.view.window().run_command('open_file', {'file': path})

@@ -1,22 +1,52 @@
 [{
+  "id": "file",
+  "children": [
+    {"caption": "-"},
+    {"caption": "Print Document...", "command": "print_document"},
+  ]
+ },
+ {
   "id": "preferences",
-  "children": [{
-    "caption": "Package Settings",
-    "mnemonic": "P",
-    "id": "package-settings",
-    "children": [{
-      "caption": "LPrint",
-      "children": [{
-        "command": "open_file",
-          "args": {"file": "${packages}/LPrint/LPrint.sublime-settings"},
-          "caption": "Settings - Default"
-      },{
-        "caption": "-"
-      }, {
-        "command": "open_file",
-        "args": {"file": "${packages}/User/LPrint.sublime-settings"},
-        "caption": "Settings – User"
-      }]
-    }]
-  }]
-}]
+  "children": [
+    {
+      "caption": "-"
+    },
+    {
+      "caption": "Select Printer...",
+      "command": "select_printer"
+    },
+    {
+      "id": "package-settings",
+      "children": [
+        {
+          "caption": "LPrint",
+          "children": [
+            {
+              "caption": "README",
+              "command": "open_file",
+              "args": {"file": "${packages}/LPrint/README.rst"}
+            },
+            {
+              "caption": "-"
+            },
+            {
+              "caption": "Settings - Default",
+              "command": "open_file",
+              "args": {"file": "${packages}/LPrint/LPrint.sublime-settings"}
+            },
+            {
+              "caption": "Settings - User",
+              "command": "open_file",
+              "args": {"file": "${packages}/User/LPrint.sublime-settings.rst"}
+            },
+            {
+              "caption": "Settings - Current Filetype",
+              "command": "lprint_current_filetype_settings",
+            },
+          ]
+        }
+       ]
+    }
+  ]
+ }
+]
