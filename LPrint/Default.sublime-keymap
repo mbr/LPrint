@@ -1,0 +1,14 @@
+[
+{
+  "keys": ["shift+alt+o"],
+  "command": "quick_print"
+},
+{
+  "keys": ["shift+alt+p"],
+  "command": "print_document"
+},
+{
+  "keys": ["shift+alt+s"],
+  "command": "select_printer"
+}
+]
