@@ -45,6 +45,7 @@ class CommandFilter(DocumentFilter):
     def _communicate(self, proc, *args, **kwargs):
         stdout, stderr = proc.communicate(*args, **kwargs)
 
+        print(stderr)
         if proc.returncode != 0:
             raise subprocess.CalledProcessError(
                 proc.returncode, proc.args, stderr

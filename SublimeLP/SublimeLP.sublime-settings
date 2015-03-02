@@ -10,7 +10,7 @@
   "media": "a4",
   "landscape": false,
   "font_size": 10,
-  "font_family": "Liberation Mono",
+  "font_family": "Courier",
   "header": false,
   "margin_top": 72,
   "margin_left": 36,
@@ -20,7 +20,12 @@
   // if printer is null, the print-systems default will be used
   "printer": null,
 
+  // options that are picked up by some filters:
+
+  "highlight": true,  // syntax highlight. varies from filter to filter
+  "header": false,     // add a header line
+
   // replace these with your custom filter chain, provided the necessary
   // tools are installed.
-  "filter_chain": ["UTF8"]
+  "filter_chain": ["Enscript"]
 }

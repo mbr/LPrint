@@ -19,7 +19,10 @@ class EnscriptFilter(CommandFilter):
         args = ['enscript', '-p', '-', '-X', encoding]
 
         if not options.pop('header', False):
-            args.append('--no-header', '')
+            args.append('--no-header')
+
+        if options.pop('highlight', True):
+            args.append('-E')
 
         args.extend(['--title', options.pop('title', 'Enscript_Print_Job')])
 
@@ -43,6 +46,7 @@ class EnscriptFilter(CommandFilter):
             options.pop('margin_bottom', ''),
         ))
 
+        print('enscript args', args)
         proc = self._popen(args)
 
         return self._communicate(proc, text.encode(encoding)), options
