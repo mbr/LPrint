@@ -36,7 +36,8 @@ def _get_print_system(settings):
     return ps
 
 
-def show_printer_select(window, ps, on_selected, add_default=True):
+def show_printer_select(window, ps, on_selected, add_default=True,
+                        message=None):
     printers = ps.get_all_printers()
 
     def select_printer(idx):
@@ -58,6 +59,8 @@ def show_printer_select(window, ps, on_selected, add_default=True):
     if add_default:
         printer_list.insert(0, '(None, use print system default)')
 
+    if message:
+        sublime.status_message(message)
     window.show_quick_panel(
         printer_list, select_printer
     )
@@ -79,7 +82,10 @@ class SelectPrinterCommand(sublime_plugin.WindowCommand):
                 ))
             sublime.save_settings(PLUGIN_CONFIG_FILE)
 
-        show_printer_select(self.window, ps, set_active_printer)
+        show_printer_select(
+            self.window, ps, set_active_printer,
+            message='Select the new default printer',
+        )
 
 
 class PrintUsingDefaultPrinterCommand(sublime_plugin.TextCommand):
