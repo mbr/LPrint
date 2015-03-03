@@ -1,18 +1,22 @@
 {
-  // If true, adds -E to each lp call
+  // any arguments in here are passed on to calls to lp and lpstat. for
+  // example, if you want to login as 'alice' to your print system, set lp_args
+  // to ['-U', 'alice']. Consult the lp and lpstat manpages for more
+  // information
   "lp_args": [],
   "lpstat_args": [],
 
   // default options for jobs. null means defaults from the system are used
-  "duplex": null,
+  "duplex": null,               // double-sided printing. valid values are
+                                // 'long-edge', 'short-edge' and 'one-sided'
   "copies": 1,
-  "priority": null,
-  "media": "a4",
+  "priority": null,             // 1-100
+  "media": "a4",                // varies depending on printer, safe choices
+                                // usually are "a4", "letter", "legal"
   "landscape": false,
   "font_size": 10,
   "font_family": "Courier",
-  "header": false,
-  "margin_top": 72,
+  "margin_top": 72,             // page-margin, in points. filter-dependant
   "margin_left": 36,
   "margin_bottom": 36,
   "margin_right": 36,
