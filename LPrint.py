@@ -5,6 +5,7 @@ import sublime_plugin
 
 from .printing.lp import PrintSystemLP
 from .printing import lib
+from .printing.exc import PrintSystemError
 from .printing.filter import DocumentPrinter
 from .util import SettingsAdapter
 
@@ -91,11 +92,14 @@ class SelectPrinterCommand(sublime_plugin.WindowCommand):
                 ))
             sublime.save_settings(PLUGIN_CONFIG_FILE)
 
-        show_printer_select(
-            self.window, ps, set_active_printer,
-            message='Select the new default printer',
-            current=settings.get('printer')
-        )
+        try:
+            show_printer_select(
+                self.window, ps, set_active_printer,
+                message='Select the new default printer',
+                current=settings.get('printer')
+            )
+        except PrintSystemError as e:
+            sublime.error_message('LPrint: {}'.format(e))
 
 
 class PrintDocumentCommand(sublime_plugin.TextCommand):
@@ -107,18 +111,21 @@ class PrintDocumentCommand(sublime_plugin.TextCommand):
         # instantiate printing system
         ps = _get_print_system(options)
 
-        if self.printer == 'ask':
-            show_printer_select(
-                self.view.window(), ps, lambda p: self._do_print(p, options),
-                message='Select destination printer',
-                current=options.get('printer')
-            )
-        elif self.printer == 'default':
-            pname = options.pop('printer')
-            if pname is None:
-                self._do_print(ps.get_default_printer(), options)
-            else:
-                self._do_print(ps.get_printer(pname), options)
+        try:
+            if self.printer == 'ask':
+                show_printer_select(
+                    self.view.window(), ps, lambda p: self._do_print(p, options),
+                    message='Select destination printer',
+                    current=options.get('printer')
+                )
+            elif self.printer == 'default':
+                pname = options.pop('printer')
+                if pname is None:
+                    self._do_print(ps.get_default_printer(), options)
+                else:
+                    self._do_print(ps.get_printer(pname), options)
+        except PrintSystemError as e:
+            sublime.error_message('LPrint: {}'.format(e))
 
     def _do_print(self, printer, options):
         filters = []
@@ -136,7 +143,10 @@ class PrintDocumentCommand(sublime_plugin.TextCommand):
         options['title'] = title
         sublime.status_message('Printing ({}): {}'.format(printer.name, title))
 
-        printer.print_raw(content, options)
+        try:
+            printer.print_raw(content, options)
+        except PrintSystemError as e:
+            sublime.error_message('LPrint: {}'.format(e))
 
 
 class QuickPrintCommand(PrintDocumentCommand):
