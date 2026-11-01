@@ -24,7 +24,7 @@
             {
               "caption": "README",
               "command": "open_file",
-              "args": {"file": "${packages}/LPrint/README.rst"}
+              "args": {"file": "${packages}/LPrint/README.md"}
             },
             {
               "caption": "-"
