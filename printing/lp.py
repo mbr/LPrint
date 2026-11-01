@@ -1,7 +1,7 @@
 import subprocess
 
 from . import PrintSystem, Printer, CmdOptsMixin
-from .exc import error_wrap
+from .exc import PrintSystemError, error_wrap
 
 
 class PrintSystemLP(PrintSystem, CmdOptsMixin):
@@ -28,7 +28,7 @@ class PrintSystemLP(PrintSystem, CmdOptsMixin):
         with error_wrap():
             buf = subprocess.check_output(self.build_args('lpstat', '-d'))
         if b':' not in buf:
-            return None
+            raise PrintSystemError('No default printer configured.')
 
         name = buf.split(b':')[-1].strip()
 

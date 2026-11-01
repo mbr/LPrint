@@ -111,19 +111,28 @@ class PrintDocumentCommand(sublime_plugin.TextCommand):
         # instantiate printing system
         ps = _get_print_system(options)
 
+        def print_selected(printer):
+            """Resolve the system default before submitting the document."""
+            try:
+                if printer is None:
+                    printer = ps.get_default_printer()
+                self._do_print(printer, options)
+            except PrintSystemError as e:
+                sublime.error_message('LPrint: {}'.format(e))
+
         try:
             if self.printer == 'ask':
                 show_printer_select(
-                    self.view.window(), ps, lambda p: self._do_print(p, options),
+                    self.view.window(), ps, print_selected,
                     message='Select destination printer',
                     current=options.get('printer')
                 )
             elif self.printer == 'default':
                 pname = options.pop('printer')
                 if pname is None:
-                    self._do_print(ps.get_default_printer(), options)
+                    print_selected(None)
                 else:
-                    self._do_print(ps.get_printer(pname), options)
+                    print_selected(ps.get_printer(pname))
         except PrintSystemError as e:
             sublime.error_message('LPrint: {}'.format(e))
 
