@@ -1,5 +1,9 @@
 # LPrint
 
+**Note**: Since Sublime Text 4 (build 4107, May 2021), Sublime has built-in
+printing support via `File -> Print`, which prints through a browser. This
+extension is therefore mostly obsolete.
+
 LPrint is a fairly flexible printing system for Sublime Text 3. It uses
 `lp`/`lpstat` to print and can filter documents through any number of programs
 before printing.
